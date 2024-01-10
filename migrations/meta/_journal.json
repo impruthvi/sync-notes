@@ -1,0 +1,34 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1704871007258,
+      "tag": "0000_mean_carmella_unuscione",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1704871544175,
+      "tag": "0001_brief_psylocke",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1704871599342,
+      "tag": "0002_quick_khan",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1704872299523,
+      "tag": "0003_large_firebird",
+      "breakpoints": true
+    }
+  ]
+}
