@@ -1,4 +1,4 @@
-import { pgTable, pgEnum, text, uuid, jsonb, integer, boolean, timestamp, foreignKey, bigint } from "drizzle-orm/pg-core"
+import { pgTable, foreignKey, pgEnum, uuid, timestamp, text, jsonb, integer, boolean, bigint } from "drizzle-orm/pg-core"
   import { sql } from "drizzle-orm"
 
 export const keyStatus = pgEnum("key_status", ['default', 'valid', 'invalid', 'expired'])
@@ -11,6 +11,13 @@ export const factorStatus = pgEnum("factor_status", ['unverified', 'verified'])
 export const aalLevel = pgEnum("aal_level", ['aal1', 'aal2', 'aal3'])
 export const codeChallengeMethod = pgEnum("code_challenge_method", ['s256', 'plain'])
 
+
+export const collaborators = pgTable("collaborators", {
+	id: uuid("id").defaultRandom().primaryKey().notNull(),
+	workspaceId: uuid("workspace_id").notNull().references(() => workspaces.id, { onDelete: "cascade" } ),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	userId: uuid("user_id").notNull(),
+});
 
 export const subscriptions = pgTable("subscriptions", {
 	id: text("id").primaryKey().notNull(),
@@ -34,7 +41,7 @@ export const files = pgTable("files", {
 	id: uuid("id").defaultRandom().primaryKey().notNull(),
 	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }),
 	title: text("title").notNull(),
-	iconId: uuid("icon_id").notNull(),
+	iconId: text("icon_id").notNull(),
 	data: text("data").notNull(),
 	inTrash: text("in_trash"),
 	bannerUrl: text("banner_url"),
@@ -46,7 +53,7 @@ export const folders = pgTable("folders", {
 	id: uuid("id").defaultRandom().primaryKey().notNull(),
 	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }),
 	title: text("title").notNull(),
-	iconId: uuid("icon_id").notNull(),
+	iconId: text("icon_id").notNull(),
 	data: text("data").notNull(),
 	inTrash: text("in_trash"),
 	bannerUrl: text("banner_url"),
@@ -58,7 +65,7 @@ export const workspaces = pgTable("workspaces", {
 	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }),
 	workspacesOwner: uuid("workspaces_owner").notNull(),
 	title: text("title").notNull(),
-	iconId: uuid("icon_id").notNull(),
+	iconId: text("icon_id").notNull(),
 	data: text("data").notNull(),
 	inTrash: text("in_trash"),
 	logo: text("logo"),
