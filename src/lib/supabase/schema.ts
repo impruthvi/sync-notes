@@ -1,4 +1,12 @@
-import { boolean, integer, jsonb, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  integer,
+  jsonb,
+  pgTable,
+  text,
+  timestamp,
+  uuid,
+} from "drizzle-orm/pg-core";
 import { prices, subscriptionStatus, users } from "../../../migrations/schema";
 import { sql } from "drizzle-orm";
 
@@ -10,7 +18,7 @@ export const workspaces = pgTable("workspaces", {
   }),
   workspacesOwner: uuid("workspaces_owner").notNull(),
   title: text("title").notNull(),
-  iconId: uuid("icon_id").notNull(),
+  iconId: text("icon_id").notNull(),
   data: text("data").notNull(),
   inTrash: text("in_trash"),
   logo: text("logo"),
@@ -24,7 +32,7 @@ export const folders = pgTable("folders", {
     mode: "string",
   }),
   title: text("title").notNull(),
-  iconId: uuid("icon_id").notNull(),
+  iconId: text("icon_id").notNull(),
   data: text("data").notNull(),
   inTrash: text("in_trash"),
   bannerUrl: text("banner_url"),
@@ -40,7 +48,7 @@ export const files = pgTable("files", {
     mode: "string",
   }),
   title: text("title").notNull(),
-  iconId: uuid("icon_id").notNull(),
+  iconId: text("icon_id").notNull(),
   data: text("data").notNull(),
   inTrash: text("in_trash"),
   bannerUrl: text("banner_url"),
@@ -52,16 +60,12 @@ export const files = pgTable("files", {
   }),
 });
 
-
-
 export const subscriptions = pgTable("subscriptions", {
   id: text("id").primaryKey().notNull(),
-  userId: uuid("user_id")
-    .notNull()
-    .references(() => users.id),
+  userId: uuid("user_id"),
   status: subscriptionStatus("status"),
   metadata: jsonb("metadata"),
-  priceId: text("price_id").references(() => prices.id),
+  priceId: text("price_id"),
   quantity: integer("quantity"),
   cancelAtPeriodEnd: boolean("cancel_at_period_end"),
   created: timestamp("created", { withTimezone: true, mode: "string" })

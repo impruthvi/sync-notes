@@ -13,374 +13,341 @@ export type Json =
   | boolean
   | null
   | { [key: string]: Json | undefined }
-  | Json[];
+  | Json[]
 
 export interface Database {
   public: {
     Tables: {
       customers: {
         Row: {
-          id: string;
-          stripe_customer_id: string | null;
-        };
+          id: string
+          stripe_customer_id: string | null
+        }
         Insert: {
-          id: string;
-          stripe_customer_id?: string | null;
-        };
+          id: string
+          stripe_customer_id?: string | null
+        }
         Update: {
-          id?: string;
-          stripe_customer_id?: string | null;
-        };
+          id?: string
+          stripe_customer_id?: string | null
+        }
         Relationships: [
           {
-            foreignKeyName: "customers_id_fkey";
-            columns: ["id"];
-            isOneToOne: true;
-            referencedRelation: "users";
-            referencedColumns: ["id"];
+            foreignKeyName: "customers_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           }
-        ];
-      };
+        ]
+      }
       files: {
         Row: {
-          banner_url: string | null;
-          created_at: string | null;
-          data: string;
-          folders_id: string | null;
-          icon_id: string;
-          id: string;
-          in_trash: string | null;
-          title: string;
-          workspaces_id: string | null;
-        };
+          banner_url: string | null
+          created_at: string | null
+          data: string
+          folders_id: string | null
+          icon_id: string
+          id: string
+          in_trash: string | null
+          title: string
+          workspaces_id: string | null
+        }
         Insert: {
-          banner_url?: string | null;
-          created_at?: string | null;
-          data: string;
-          folders_id?: string | null;
-          icon_id: string;
-          id?: string;
-          in_trash?: string | null;
-          title: string;
-          workspaces_id?: string | null;
-        };
+          banner_url?: string | null
+          created_at?: string | null
+          data: string
+          folders_id?: string | null
+          icon_id: string
+          id?: string
+          in_trash?: string | null
+          title: string
+          workspaces_id?: string | null
+        }
         Update: {
-          banner_url?: string | null;
-          created_at?: string | null;
-          data?: string;
-          folders_id?: string | null;
-          icon_id?: string;
-          id?: string;
-          in_trash?: string | null;
-          title?: string;
-          workspaces_id?: string | null;
-        };
+          banner_url?: string | null
+          created_at?: string | null
+          data?: string
+          folders_id?: string | null
+          icon_id?: string
+          id?: string
+          in_trash?: string | null
+          title?: string
+          workspaces_id?: string | null
+        }
         Relationships: [
           {
-            foreignKeyName: "files_folders_id_folders_id_fk";
-            columns: ["folders_id"];
-            isOneToOne: false;
-            referencedRelation: "folders";
-            referencedColumns: ["id"];
+            foreignKeyName: "files_folders_id_folders_id_fk"
+            columns: ["folders_id"]
+            isOneToOne: false
+            referencedRelation: "folders"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "files_workspaces_id_workspaces_id_fk";
-            columns: ["workspaces_id"];
-            isOneToOne: false;
-            referencedRelation: "workspaces";
-            referencedColumns: ["id"];
+            foreignKeyName: "files_workspaces_id_workspaces_id_fk"
+            columns: ["workspaces_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
           }
-        ];
-      };
+        ]
+      }
       folders: {
         Row: {
-          banner_url: string | null;
-          created_at: string | null;
-          data: string;
-          icon_id: string;
-          id: string;
-          in_trash: string | null;
-          title: string;
-          workspaces_id: string | null;
-        };
+          banner_url: string | null
+          created_at: string | null
+          data: string
+          icon_id: string
+          id: string
+          in_trash: string | null
+          title: string
+          workspaces_id: string | null
+        }
         Insert: {
-          banner_url?: string | null;
-          created_at?: string | null;
-          data: string;
-          icon_id: string;
-          id?: string;
-          in_trash?: string | null;
-          title: string;
-          workspaces_id?: string | null;
-        };
+          banner_url?: string | null
+          created_at?: string | null
+          data: string
+          icon_id: string
+          id?: string
+          in_trash?: string | null
+          title: string
+          workspaces_id?: string | null
+        }
         Update: {
-          banner_url?: string | null;
-          created_at?: string | null;
-          data?: string;
-          icon_id?: string;
-          id?: string;
-          in_trash?: string | null;
-          title?: string;
-          workspaces_id?: string | null;
-        };
+          banner_url?: string | null
+          created_at?: string | null
+          data?: string
+          icon_id?: string
+          id?: string
+          in_trash?: string | null
+          title?: string
+          workspaces_id?: string | null
+        }
         Relationships: [
           {
-            foreignKeyName: "folders_workspaces_id_workspaces_id_fk";
-            columns: ["workspaces_id"];
-            isOneToOne: false;
-            referencedRelation: "workspaces";
-            referencedColumns: ["id"];
+            foreignKeyName: "folders_workspaces_id_workspaces_id_fk"
+            columns: ["workspaces_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
           }
-        ];
-      };
+        ]
+      }
       prices: {
         Row: {
-          active: boolean | null;
-          currency: string | null;
-          description: string | null;
-          id: string;
-          interval: Database["public"]["Enums"]["pricing_plan_interval"] | null;
-          interval_count: number | null;
-          metadata: Json | null;
-          product_id: string | null;
-          trial_period_days: number | null;
-          type: Database["public"]["Enums"]["pricing_type"] | null;
-          unit_amount: number | null;
-        };
+          active: boolean | null
+          currency: string | null
+          description: string | null
+          id: string
+          interval: Database["public"]["Enums"]["pricing_plan_interval"] | null
+          interval_count: number | null
+          metadata: Json | null
+          product_id: string | null
+          trial_period_days: number | null
+          type: Database["public"]["Enums"]["pricing_type"] | null
+          unit_amount: number | null
+        }
         Insert: {
-          active?: boolean | null;
-          currency?: string | null;
-          description?: string | null;
-          id: string;
-          interval?:
-            | Database["public"]["Enums"]["pricing_plan_interval"]
-            | null;
-          interval_count?: number | null;
-          metadata?: Json | null;
-          product_id?: string | null;
-          trial_period_days?: number | null;
-          type?: Database["public"]["Enums"]["pricing_type"] | null;
-          unit_amount?: number | null;
-        };
+          active?: boolean | null
+          currency?: string | null
+          description?: string | null
+          id: string
+          interval?: Database["public"]["Enums"]["pricing_plan_interval"] | null
+          interval_count?: number | null
+          metadata?: Json | null
+          product_id?: string | null
+          trial_period_days?: number | null
+          type?: Database["public"]["Enums"]["pricing_type"] | null
+          unit_amount?: number | null
+        }
         Update: {
-          active?: boolean | null;
-          currency?: string | null;
-          description?: string | null;
-          id?: string;
-          interval?:
-            | Database["public"]["Enums"]["pricing_plan_interval"]
-            | null;
-          interval_count?: number | null;
-          metadata?: Json | null;
-          product_id?: string | null;
-          trial_period_days?: number | null;
-          type?: Database["public"]["Enums"]["pricing_type"] | null;
-          unit_amount?: number | null;
-        };
+          active?: boolean | null
+          currency?: string | null
+          description?: string | null
+          id?: string
+          interval?: Database["public"]["Enums"]["pricing_plan_interval"] | null
+          interval_count?: number | null
+          metadata?: Json | null
+          product_id?: string | null
+          trial_period_days?: number | null
+          type?: Database["public"]["Enums"]["pricing_type"] | null
+          unit_amount?: number | null
+        }
         Relationships: [
           {
-            foreignKeyName: "prices_product_id_fkey";
-            columns: ["product_id"];
-            isOneToOne: false;
-            referencedRelation: "products";
-            referencedColumns: ["id"];
+            foreignKeyName: "prices_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
           }
-        ];
-      };
+        ]
+      }
       products: {
         Row: {
-          active: boolean | null;
-          description: string | null;
-          id: string;
-          image: string | null;
-          metadata: Json | null;
-          name: string | null;
-        };
+          active: boolean | null
+          description: string | null
+          id: string
+          image: string | null
+          metadata: Json | null
+          name: string | null
+        }
         Insert: {
-          active?: boolean | null;
-          description?: string | null;
-          id: string;
-          image?: string | null;
-          metadata?: Json | null;
-          name?: string | null;
-        };
+          active?: boolean | null
+          description?: string | null
+          id: string
+          image?: string | null
+          metadata?: Json | null
+          name?: string | null
+        }
         Update: {
-          active?: boolean | null;
-          description?: string | null;
-          id?: string;
-          image?: string | null;
-          metadata?: Json | null;
-          name?: string | null;
-        };
-        Relationships: [];
-      };
+          active?: boolean | null
+          description?: string | null
+          id?: string
+          image?: string | null
+          metadata?: Json | null
+          name?: string | null
+        }
+        Relationships: []
+      }
       subscriptions: {
         Row: {
-          cancel_at: string | null;
-          cancel_at_period_end: boolean | null;
-          canceled_at: string | null;
-          created: string;
-          current_period_end: string;
-          current_period_start: string;
-          ended_at: string | null;
-          id: string;
-          metadata: Json | null;
-          price_id: string | null;
-          quantity: number | null;
-          status: Database["public"]["Enums"]["subscription_status"] | null;
-          trial_end: string | null;
-          trial_start: string | null;
-          user_id: string;
-        };
+          cancel_at: string | null
+          cancel_at_period_end: boolean | null
+          canceled_at: string | null
+          created: string
+          current_period_end: string
+          current_period_start: string
+          ended_at: string | null
+          id: string
+          metadata: Json | null
+          price_id: string | null
+          quantity: number | null
+          status: Database["public"]["Enums"]["subscription_status"] | null
+          trial_end: string | null
+          trial_start: string | null
+          user_id: string | null
+        }
         Insert: {
-          cancel_at?: string | null;
-          cancel_at_period_end?: boolean | null;
-          canceled_at?: string | null;
-          created?: string;
-          current_period_end?: string;
-          current_period_start?: string;
-          ended_at?: string | null;
-          id: string;
-          metadata?: Json | null;
-          price_id?: string | null;
-          quantity?: number | null;
-          status?: Database["public"]["Enums"]["subscription_status"] | null;
-          trial_end?: string | null;
-          trial_start?: string | null;
-          user_id: string;
-        };
+          cancel_at?: string | null
+          cancel_at_period_end?: boolean | null
+          canceled_at?: string | null
+          created?: string
+          current_period_end?: string
+          current_period_start?: string
+          ended_at?: string | null
+          id: string
+          metadata?: Json | null
+          price_id?: string | null
+          quantity?: number | null
+          status?: Database["public"]["Enums"]["subscription_status"] | null
+          trial_end?: string | null
+          trial_start?: string | null
+          user_id?: string | null
+        }
         Update: {
-          cancel_at?: string | null;
-          cancel_at_period_end?: boolean | null;
-          canceled_at?: string | null;
-          created?: string;
-          current_period_end?: string;
-          current_period_start?: string;
-          ended_at?: string | null;
-          id?: string;
-          metadata?: Json | null;
-          price_id?: string | null;
-          quantity?: number | null;
-          status?: Database["public"]["Enums"]["subscription_status"] | null;
-          trial_end?: string | null;
-          trial_start?: string | null;
-          user_id?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "subscriptions_price_id_fkey";
-            columns: ["price_id"];
-            isOneToOne: false;
-            referencedRelation: "prices";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "subscriptions_price_id_prices_id_fk";
-            columns: ["price_id"];
-            isOneToOne: false;
-            referencedRelation: "prices";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "subscriptions_user_id_fkey";
-            columns: ["user_id"];
-            isOneToOne: false;
-            referencedRelation: "users";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "subscriptions_user_id_users_id_fk";
-            columns: ["user_id"];
-            isOneToOne: false;
-            referencedRelation: "users";
-            referencedColumns: ["id"];
-          }
-        ];
-      };
+          cancel_at?: string | null
+          cancel_at_period_end?: boolean | null
+          canceled_at?: string | null
+          created?: string
+          current_period_end?: string
+          current_period_start?: string
+          ended_at?: string | null
+          id?: string
+          metadata?: Json | null
+          price_id?: string | null
+          quantity?: number | null
+          status?: Database["public"]["Enums"]["subscription_status"] | null
+          trial_end?: string | null
+          trial_start?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       users: {
         Row: {
-          avatar_url: string | null;
-          billing_address: Json | null;
-          email: string | null;
-          full_name: string | null;
-          id: string;
-          payment_method: Json | null;
-          updated_at: string | null;
-        };
+          avatar_url: string | null
+          billing_address: Json | null
+          email: string | null
+          full_name: string | null
+          id: string
+          payment_method: Json | null
+          updated_at: string | null
+        }
         Insert: {
-          avatar_url?: string | null;
-          billing_address?: Json | null;
-          email?: string | null;
-          full_name?: string | null;
-          id: string;
-          payment_method?: Json | null;
-          updated_at?: string | null;
-        };
+          avatar_url?: string | null
+          billing_address?: Json | null
+          email?: string | null
+          full_name?: string | null
+          id: string
+          payment_method?: Json | null
+          updated_at?: string | null
+        }
         Update: {
-          avatar_url?: string | null;
-          billing_address?: Json | null;
-          email?: string | null;
-          full_name?: string | null;
-          id?: string;
-          payment_method?: Json | null;
-          updated_at?: string | null;
-        };
+          avatar_url?: string | null
+          billing_address?: Json | null
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          payment_method?: Json | null
+          updated_at?: string | null
+        }
         Relationships: [
           {
-            foreignKeyName: "users_id_fkey";
-            columns: ["id"];
-            isOneToOne: true;
-            referencedRelation: "users";
-            referencedColumns: ["id"];
+            foreignKeyName: "users_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           }
-        ];
-      };
+        ]
+      }
       workspaces: {
         Row: {
-          banner_url: string | null;
-          created_at: string | null;
-          data: string;
-          icon_id: string;
-          id: string;
-          in_trash: string | null;
-          logo: string | null;
-          title: string;
-          workspaces_owner: string;
-        };
+          banner_url: string | null
+          created_at: string | null
+          data: string
+          icon_id: string
+          id: string
+          in_trash: string | null
+          logo: string | null
+          title: string
+          workspaces_owner: string
+        }
         Insert: {
-          banner_url?: string | null;
-          created_at?: string | null;
-          data: string;
-          icon_id: string;
-          id?: string;
-          in_trash?: string | null;
-          logo?: string | null;
-          title: string;
-          workspaces_owner: string;
-        };
+          banner_url?: string | null
+          created_at?: string | null
+          data: string
+          icon_id: string
+          id?: string
+          in_trash?: string | null
+          logo?: string | null
+          title: string
+          workspaces_owner: string
+        }
         Update: {
-          banner_url?: string | null;
-          created_at?: string | null;
-          data?: string;
-          icon_id?: string;
-          id?: string;
-          in_trash?: string | null;
-          logo?: string | null;
-          title?: string;
-          workspaces_owner?: string;
-        };
-        Relationships: [];
-      };
-    };
+          banner_url?: string | null
+          created_at?: string | null
+          data?: string
+          icon_id?: string
+          id?: string
+          in_trash?: string | null
+          logo?: string | null
+          title?: string
+          workspaces_owner?: string
+        }
+        Relationships: []
+      }
+    }
     Views: {
-      [_ in never]: never;
-    };
+      [_ in never]: never
+    }
     Functions: {
-      [_ in never]: never;
-    };
+      [_ in never]: never
+    }
     Enums: {
-      pricing_plan_interval: "day" | "week" | "month" | "year";
-      pricing_type: "one_time" | "recurring";
+      pricing_plan_interval: "day" | "week" | "month" | "year"
+      pricing_type: "one_time" | "recurring"
       subscription_status:
         | "trialing"
         | "active"
@@ -388,12 +355,12 @@ export interface Database {
         | "incomplete"
         | "incomplete_expired"
         | "past_due"
-        | "unpaid";
-    };
+        | "unpaid"
+    }
     CompositeTypes: {
-      [_ in never]: never;
-    };
-  };
+      [_ in never]: never
+    }
+  }
 }
 
 export type Tables<
@@ -407,7 +374,7 @@ export type Tables<
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
       Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
-      Row: infer R;
+      Row: infer R
     }
     ? R
     : never
@@ -415,11 +382,11 @@ export type Tables<
       Database["public"]["Views"])
   ? (Database["public"]["Tables"] &
       Database["public"]["Views"])[PublicTableNameOrOptions] extends {
-      Row: infer R;
+      Row: infer R
     }
     ? R
     : never
-  : never;
+  : never
 
 export type TablesInsert<
   PublicTableNameOrOptions extends
@@ -430,17 +397,17 @@ export type TablesInsert<
     : never = never
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Insert: infer I;
+      Insert: infer I
     }
     ? I
     : never
   : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
   ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
-      Insert: infer I;
+      Insert: infer I
     }
     ? I
     : never
-  : never;
+  : never
 
 export type TablesUpdate<
   PublicTableNameOrOptions extends
@@ -451,17 +418,17 @@ export type TablesUpdate<
     : never = never
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Update: infer U;
+      Update: infer U
     }
     ? U
     : never
   : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
   ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
-      Update: infer U;
+      Update: infer U
     }
     ? U
     : never
-  : never;
+  : never
 
 export type Enums<
   PublicEnumNameOrOptions extends
@@ -474,7 +441,8 @@ export type Enums<
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof Database["public"]["Enums"]
   ? Database["public"]["Enums"][PublicEnumNameOrOptions]
-  : never;
+  : never
+
 
 export type workspace = InferSelectModel<typeof workspaces>;
 export type User = InferSelectModel<typeof users>;
