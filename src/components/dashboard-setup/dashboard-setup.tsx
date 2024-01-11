@@ -86,7 +86,7 @@ const DashboardSetup: React.FC<DashboardSetupProps> = ({
         id: workspaceUUID,
         inTrash: "",
         title: value.workspaceName,
-        workspacesOwner: user.id,
+        workspaceOwner: user.id,
         logo: filePath || null,
         bannerUrl: "",
       };
