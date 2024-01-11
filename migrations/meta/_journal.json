@@ -29,6 +29,41 @@
       "when": 1704872299523,
       "tag": "0003_large_firebird",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1704959097637,
+      "tag": "0004_heavy_tigra",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1704959219299,
+      "tag": "0005_cute_patriot",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1704959274990,
+      "tag": "0006_silent_mandroid",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1704959342472,
+      "tag": "0007_windy_madame_hydra",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1704959543795,
+      "tag": "0008_smooth_amphibian",
+      "breakpoints": true
     }
   ]
 }
