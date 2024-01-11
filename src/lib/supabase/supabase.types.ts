@@ -18,6 +18,42 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      collaborators: {
+        Row: {
+          created_at: string
+          id: string
+          user_id: string
+          workspace_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          user_id: string
+          workspace_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          user_id?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "collaborators_user_id_users_id_fk"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "collaborators_workspace_id_workspaces_id_fk"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       customers: {
         Row: {
           id: string
@@ -31,61 +67,53 @@ export interface Database {
           id?: string
           stripe_customer_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "customers_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
-        ]
+        Relationships: []
       }
       files: {
         Row: {
           banner_url: string | null
-          created_at: string | null
-          data: string
-          folders_id: string | null
+          created_at: string
+          data: string | null
+          folder_id: string
           icon_id: string
           id: string
           in_trash: string | null
           title: string
-          workspaces_id: string | null
+          workspace_id: string
         }
         Insert: {
           banner_url?: string | null
-          created_at?: string | null
-          data: string
-          folders_id?: string | null
+          created_at?: string
+          data?: string | null
+          folder_id: string
           icon_id: string
           id?: string
           in_trash?: string | null
           title: string
-          workspaces_id?: string | null
+          workspace_id: string
         }
         Update: {
           banner_url?: string | null
-          created_at?: string | null
-          data?: string
-          folders_id?: string | null
+          created_at?: string
+          data?: string | null
+          folder_id?: string
           icon_id?: string
           id?: string
           in_trash?: string | null
           title?: string
-          workspaces_id?: string | null
+          workspace_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "files_folders_id_folders_id_fk"
-            columns: ["folders_id"]
+            foreignKeyName: "files_folder_id_folders_id_fk"
+            columns: ["folder_id"]
             isOneToOne: false
             referencedRelation: "folders"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "files_workspaces_id_workspaces_id_fk"
-            columns: ["workspaces_id"]
+            foreignKeyName: "files_workspace_id_workspaces_id_fk"
+            columns: ["workspace_id"]
             isOneToOne: false
             referencedRelation: "workspaces"
             referencedColumns: ["id"]
@@ -95,38 +123,38 @@ export interface Database {
       folders: {
         Row: {
           banner_url: string | null
-          created_at: string | null
-          data: string
+          created_at: string
+          data: string | null
           icon_id: string
           id: string
           in_trash: string | null
           title: string
-          workspaces_id: string | null
+          workspace_id: string
         }
         Insert: {
           banner_url?: string | null
-          created_at?: string | null
-          data: string
+          created_at?: string
+          data?: string | null
           icon_id: string
           id?: string
           in_trash?: string | null
           title: string
-          workspaces_id?: string | null
+          workspace_id: string
         }
         Update: {
           banner_url?: string | null
-          created_at?: string | null
-          data?: string
+          created_at?: string
+          data?: string | null
           icon_id?: string
           id?: string
           in_trash?: string | null
           title?: string
-          workspaces_id?: string | null
+          workspace_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "folders_workspaces_id_workspaces_id_fk"
-            columns: ["workspaces_id"]
+            foreignKeyName: "folders_workspace_id_workspaces_id_fk"
+            columns: ["workspace_id"]
             isOneToOne: false
             referencedRelation: "workspaces"
             referencedColumns: ["id"]
@@ -175,7 +203,7 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "prices_product_id_fkey"
+            foreignKeyName: "prices_product_id_products_id_fk"
             columns: ["product_id"]
             isOneToOne: false
             referencedRelation: "products"
@@ -226,7 +254,7 @@ export interface Database {
           status: Database["public"]["Enums"]["subscription_status"] | null
           trial_end: string | null
           trial_start: string | null
-          user_id: string | null
+          user_id: string
         }
         Insert: {
           cancel_at?: string | null
@@ -243,7 +271,7 @@ export interface Database {
           status?: Database["public"]["Enums"]["subscription_status"] | null
           trial_end?: string | null
           trial_start?: string | null
-          user_id?: string | null
+          user_id: string
         }
         Update: {
           cancel_at?: string | null
@@ -260,9 +288,17 @@ export interface Database {
           status?: Database["public"]["Enums"]["subscription_status"] | null
           trial_end?: string | null
           trial_start?: string | null
-          user_id?: string | null
+          user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_price_id_prices_id_fk"
+            columns: ["price_id"]
+            isOneToOne: false
+            referencedRelation: "prices"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       users: {
         Row: {
@@ -292,49 +328,41 @@ export interface Database {
           payment_method?: Json | null
           updated_at?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "users_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
-        ]
+        Relationships: []
       }
       workspaces: {
         Row: {
           banner_url: string | null
-          created_at: string | null
-          data: string
+          created_at: string
+          data: string | null
           icon_id: string
           id: string
           in_trash: string | null
           logo: string | null
           title: string
-          workspaces_owner: string
+          workspace_owner: string
         }
         Insert: {
           banner_url?: string | null
-          created_at?: string | null
-          data: string
+          created_at?: string
+          data?: string | null
           icon_id: string
           id?: string
           in_trash?: string | null
           logo?: string | null
           title: string
-          workspaces_owner: string
+          workspace_owner: string
         }
         Update: {
           banner_url?: string | null
-          created_at?: string | null
-          data?: string
+          created_at?: string
+          data?: string | null
           icon_id?: string
           id?: string
           in_trash?: string | null
           logo?: string | null
           title?: string
-          workspaces_owner?: string
+          workspace_owner?: string
         }
         Relationships: []
       }
@@ -346,6 +374,8 @@ export interface Database {
       [_ in never]: never
     }
     Enums: {
+      action: "ERROR" | "TRUNCATE" | "DELETE" | "UPDATE" | "INSERT"
+      equality_op: "in" | "gte" | "gt" | "lte" | "lt" | "neq" | "eq"
       pricing_plan_interval: "day" | "week" | "month" | "year"
       pricing_type: "one_time" | "recurring"
       subscription_status:
