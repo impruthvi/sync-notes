@@ -1,7 +1,7 @@
 "use client";
 import { AuthUser } from "@supabase/supabase-js";
 import React, { useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { v4 } from "uuid";
 
 import {
@@ -11,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
+import EmojiPicker from "../global/emojo-picker";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Subscription, workspace } from "@/lib/supabase/supabase.types";
@@ -19,10 +20,10 @@ import Loader from "../global/Loader";
 import { createWorkspace } from "@/lib/supabase/queries";
 import { useToast } from "../ui/use-toast";
 import { useRouter } from "next/navigation";
+import { useAppState } from "@/lib/providers/state-provider";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { CreateWorkspaceFormSchema } from "@/lib/types";
 import { z } from "zod";
-import EmojiPicker from "../global/emojo-picker";
 
 interface DashboardSetupProps {
   user: AuthUser;
@@ -35,6 +36,7 @@ const DashboardSetup: React.FC<DashboardSetupProps> = ({
 }) => {
   const { toast } = useToast();
   const router = useRouter();
+  const { dispatch } = useAppState();
   const [selectedEmoji, setSelectedEmoji] = useState("💼");
   const supabase = createClientComponentClient();
   const {
@@ -88,10 +90,15 @@ const DashboardSetup: React.FC<DashboardSetupProps> = ({
         logo: filePath || null,
         bannerUrl: "",
       };
+      
       const { data, error: createError } = await createWorkspace(newWorkspace);
       if (createError) {
         throw new Error();
       }
+      dispatch({
+        type: "ADD_WORKSPACE",
+        payload: { ...newWorkspace, folders: [] },
+      });
 
       toast({
         title: "Workspace Created",
@@ -176,7 +183,7 @@ const DashboardSetup: React.FC<DashboardSetupProps> = ({
                 type="file"
                 accept="image/*"
                 placeholder="Workspace Name"
-                disabled={isLoading || subscription?.status !== "active"}
+                // disabled={isLoading || subscription?.status !== 'active'}
                 {...register("logo", {
                   required: false,
                 })}
