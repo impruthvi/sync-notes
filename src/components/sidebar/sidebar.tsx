@@ -12,6 +12,7 @@ import {
   getUserSubscriptionStatus,
 } from "@/lib/supabase/queries";
 import { twMerge } from "tailwind-merge";
+import WorkspaceeDropdown from "./workspace-dropdown";
 interface SidebarProps {
   params: { workspaceId: string };
   className?: string;
@@ -52,7 +53,16 @@ const Sidebar: React.FC<SidebarProps> = async ({ params, className }) => {
         className
       )}
     >
-      Hello
+      <WorkspaceeDropdown
+        collaboratingWorkspaces={collaboratingWorkspaces}
+        privateWorkspaces={privateWorkspaces}
+        sharedWorkspaces={sharedWorkspaces}
+        defaultWorkspace={[
+          ...privateWorkspaces,
+          ...sharedWorkspaces,
+          ...collaboratingWorkspaces,
+        ].find((workspace) => workspace.id === params.workspaceId)}
+      ></WorkspaceeDropdown>
     </aside>
   );
 };

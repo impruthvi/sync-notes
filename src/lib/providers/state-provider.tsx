@@ -21,7 +21,14 @@ interface AppState {
   workspaces: appWorkspacesType[] | [];
 }
 
-type Action = { type: "ADD_WORKSPACE"; payload: appWorkspacesType };
+type Action =
+  | { type: "ADD_WORKSPACE"; payload: appWorkspacesType }
+  | {
+      type: "SET_WORKSPACES";
+      payload: {
+        workspaces: appWorkspacesType[] | [];
+      };
+    };
 
 const initialState: AppState = { workspaces: [] };
 
@@ -34,6 +41,12 @@ const appReducer = (
       return {
         ...state,
         workspaces: [...state.workspaces, action.payload],
+      };
+
+    case "SET_WORKSPACES":
+      return {
+        ...state,
+        workspaces: action.payload.workspaces,
       };
 
     default:
