@@ -4,7 +4,7 @@ import { useAppState } from "@/lib/providers/state-provider";
 import { Subscription } from "@/lib/supabase/supabase.types";
 import React, { useEffect, useState } from "react";
 import { Progress } from "../ui/progress";
-import CypressDiamondIcon from "../icons/syncnoteDiamongIcon";
+import SyncnoteDiamondIcon from "../icons/syncnoteDiamongIcon";
 
 interface PlanUsageProps {
   foldersLength: number;
@@ -40,7 +40,7 @@ const PlanUsage: React.FC<PlanUsageProps> = ({
         "
         >
           <div className="h-4 w-4">
-            <CypressDiamondIcon />
+            <SyncnoteDiamondIcon />
           </div>
           <div
             className="flex 
