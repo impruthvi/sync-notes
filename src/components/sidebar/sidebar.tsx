@@ -14,6 +14,7 @@ import {
 import { twMerge } from "tailwind-merge";
 import WorkspaceeDropdown from "./workspace-dropdown";
 import PlanUsage from "./plan-usage";
+import NativeNavigation from "./native-navigation";
 interface SidebarProps {
   params: { workspaceId: string };
   className?: string;
@@ -54,20 +55,23 @@ const Sidebar: React.FC<SidebarProps> = async ({ params, className }) => {
         className
       )}
     >
-      <WorkspaceeDropdown
-        collaboratingWorkspaces={collaboratingWorkspaces}
-        privateWorkspaces={privateWorkspaces}
-        sharedWorkspaces={sharedWorkspaces}
-        defaultWorkspace={[
-          ...privateWorkspaces,
-          ...sharedWorkspaces,
-          ...collaboratingWorkspaces,
-        ].find((workspace) => workspace.id === params.workspaceId)}
-      />
-      <PlanUsage
-        foldersLength={workspaceFolderData?.length ?? 0}
-        subscription={subscriptionData}
-      />
+      <div className="">
+        <WorkspaceeDropdown
+          collaboratingWorkspaces={collaboratingWorkspaces}
+          privateWorkspaces={privateWorkspaces}
+          sharedWorkspaces={sharedWorkspaces}
+          defaultWorkspace={[
+            ...privateWorkspaces,
+            ...sharedWorkspaces,
+            ...collaboratingWorkspaces,
+          ].find((workspace) => workspace.id === params.workspaceId)}
+        />
+        <PlanUsage
+          foldersLength={workspaceFolderData?.length ?? 0}
+          subscription={subscriptionData}
+        />
+        <NativeNavigation myWorkspaceId={params.workspaceId} />
+      </div>
     </aside>
   );
 };
