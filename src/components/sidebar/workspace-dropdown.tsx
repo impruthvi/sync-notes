@@ -27,7 +27,7 @@ const WorkspaceeDropdown: React.FC<WorkspaceeDropdownProps> = ({
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
 
   useEffect(() => {
-    if (!state.workspaces) {
+    if (!state.workspaces.length) {
       dispatch({
         type: "SET_WORKSPACES",
         payload: {
@@ -43,6 +43,9 @@ const WorkspaceeDropdown: React.FC<WorkspaceeDropdownProps> = ({
       });
     }
   }, [privateWorkspaces, sharedWorkspaces, collaboratingWorkspaces]);
+
+
+
 
   const habndleWorkspaceChange = (workspace: workspace) => {
     setSelectedWorkspace(workspace);
