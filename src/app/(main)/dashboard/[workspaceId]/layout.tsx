@@ -20,6 +20,7 @@ const Layout: React.FC<LayoutProps> = ({ children, params }) => {
         border-l-[1px]
         w-full
         relative
+        overflow-scroll
       "
       >
         {children}
