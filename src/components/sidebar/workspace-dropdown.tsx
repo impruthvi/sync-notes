@@ -3,6 +3,7 @@
 import { useAppState } from "@/lib/providers/state-provider";
 import { workspace } from "@/lib/supabase/supabase.types";
 import React, { useEffect } from "react";
+import SelectedWorkspace from "./selected-workspace";
 
 interface WorkspaceeDropdownProps {
   privateWorkspaces: workspace[] | [];
@@ -50,7 +51,14 @@ const WorkspaceeDropdown: React.FC<WorkspaceeDropdownProps> = ({
     <div className="relative inline-block text-left">
       <div className="">
         <span onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
-            {selectedWorkspace ? selectedWorkspace.title : ""}
+          {selectedWorkspace ? (
+            <SelectedWorkspace
+              workspace={selectedWorkspace}
+              onClick={() => {}}
+            />
+          ) : (
+            "Select a workspace"
+          )}
         </span>
       </div>
     </div>
