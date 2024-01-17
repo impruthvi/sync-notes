@@ -44,8 +44,12 @@ const WorkspaceeDropdown: React.FC<WorkspaceeDropdownProps> = ({
     }
   }, [privateWorkspaces, sharedWorkspaces, collaboratingWorkspaces]);
 
-
-
+  useEffect(() => {
+    const findSelectedWorkspace = state.workspaces.find(
+      (workspace) => workspace.id === defaultWorkspace?.id
+    );
+    if (findSelectedWorkspace) setSelectedWorkspace(findSelectedWorkspace);
+  }, [state, defaultWorkspace]);
 
   const habndleWorkspaceChange = (workspace: workspace) => {
     setSelectedWorkspace(workspace);
@@ -59,7 +63,7 @@ const WorkspaceeDropdown: React.FC<WorkspaceeDropdownProps> = ({
           {selectedWorkspace ? (
             <SelectedWorkspace
               workspace={selectedWorkspace}
-              onClick={() => {}}
+              onClick={habndleWorkspaceChange}
             />
           ) : (
             "Select a workspace"
@@ -93,7 +97,7 @@ const WorkspaceeDropdown: React.FC<WorkspaceeDropdownProps> = ({
                     <SelectedWorkspace
                       key={option.id}
                       workspace={option}
-                      onClick={setSelectedWorkspace}
+                      onClick={habndleWorkspaceChange}
                     />
                   ))}
                 </>
@@ -106,7 +110,7 @@ const WorkspaceeDropdown: React.FC<WorkspaceeDropdownProps> = ({
                     <SelectedWorkspace
                       key={option.id}
                       workspace={option}
-                      onClick={setSelectedWorkspace}
+                      onClick={habndleWorkspaceChange}
                     />
                   ))}
                 </>
@@ -119,7 +123,7 @@ const WorkspaceeDropdown: React.FC<WorkspaceeDropdownProps> = ({
                     <SelectedWorkspace
                       key={option.id}
                       workspace={option}
-                      onClick={setSelectedWorkspace}
+                      onClick={habndleWorkspaceChange}
                     />
                   ))}
                 </>

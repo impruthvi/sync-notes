@@ -1,9 +1,10 @@
-import Link from 'next/link';
-import React from 'react';
-import { twMerge } from 'tailwind-merge';
-import SyncnoteHomeIcon from '../icons/syncnoteHomeIcon';
-import SyncnoteSettingsIcon from '../icons/syncnoteSettingsIcon';
-import SyncnoteTrashIcon from '../icons/syncnoteTrashIcon';
+import Link from "next/link";
+import React from "react";
+import { twMerge } from "tailwind-merge";
+import SyncnoteHomeIcon from "../icons/syncnoteHomeIcon";
+import SyncnoteSettingsIcon from "../icons/syncnoteSettingsIcon";
+import SyncnoteTrashIcon from "../icons/syncnoteTrashIcon";
+import Settings from "../settings/settings";
 
 interface NativeNavigationProps {
   myWorkspaceId: string;
@@ -15,7 +16,7 @@ const NativeNavigation: React.FC<NativeNavigationProps> = ({
   className,
 }) => {
   return (
-    <nav className={twMerge('my-2', className)}>
+    <nav className={twMerge("my-2", className)}>
       <ul className="flex flex-col gap-2">
         <li>
           <Link
@@ -31,21 +32,20 @@ const NativeNavigation: React.FC<NativeNavigationProps> = ({
             <span>My Workspace</span>
           </Link>
         </li>
-
-        <li>
-          <Link
+        <Settings>
+          <li
             className="group/native
             flex
             text-Neutrals/neutrals-7
             transition-all
             gap-2
-          "
-            href={`/dashboard/${myWorkspaceId}`}
+            cursor-pointer
+            "
           >
             <SyncnoteSettingsIcon />
             <span>Settings</span>
-          </Link>
-        </li>
+          </li>
+        </Settings>
 
         <li>
           <Link
@@ -61,7 +61,6 @@ const NativeNavigation: React.FC<NativeNavigationProps> = ({
             <span>Trash</span>
           </Link>
         </li>
-
       </ul>
     </nav>
   );
