@@ -10,6 +10,7 @@ import {
   deleteFolder,
   updateFile,
   updateFolder,
+  updateWorkspace,
 } from "@/lib/supabase/queries";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -22,6 +23,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Badge } from "../ui/badge";
 import Image from "next/image";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import EmojiPicker from "../global/emojo-picker";
 
 interface QuillEditorProps {
   dirDetails: File | Folder | workspace;
@@ -192,6 +194,38 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
     return `${workspaceBreadCrumb} ${folderBreadCrumb} ${fileBreadCrumb}`;
   }, [state, pathname, workspaceId]);
 
+  const iconOnChange = async (icon: string) => {
+    if (!fileId) return;
+    if (dirType === "workspace") {
+      dispatch({
+        type: "UPDATE_WORKSPACE",
+        payload: { workspace: { iconId: icon }, workspaceId: fileId },
+      });
+      await updateWorkspace({ iconId: icon }, fileId);
+    }
+    if (dirType === "folder") {
+      if (!workspaceId) return;
+      dispatch({
+        type: "UPDATE_FOLDER",
+        payload: {
+          folder: { iconId: icon },
+          workspaceId,
+          folderId: fileId,
+        },
+      });
+      await updateFolder({ iconId: icon }, fileId);
+    }
+    if (dirType === "file") {
+      if (!workspaceId || !folderId) return;
+
+      dispatch({
+        type: "UPDATE_FILE",
+        payload: { file: { iconId: icon }, workspaceId, folderId, fileId },
+      });
+      await updateFile({ iconId: icon }, fileId);
+    }
+  };
+
   return (
     <>
       <div className="relative">
@@ -342,6 +376,34 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
         </div>
       )}
       <div className="flex justify-center items-center flex-col mt-2 relative">
+        <div
+          className="w-full 
+        self-center 
+        max-w-[800px] 
+        flex 
+        flex-col
+         px-7 
+         lg:my-8"
+        >
+          <div className="text-[80px]">
+            <EmojiPicker getValue={iconOnChange}>
+              <div
+                className="w-[100px]
+                cursor-pointer
+                transition-colors
+                h-[100px]
+                flex
+                items-center
+                justify-center
+                hover:bg-muted
+                rounded-xl"
+              >
+                {details.iconId}
+              </div>
+            </EmojiPicker>
+          </div>
+        </div>
+
         <div id="container" className="max-w-[800px]" ref={wrapperRef}></div>
       </div>
     </>
