@@ -5,7 +5,6 @@ import { File, Folder, Subscription, User, workspace } from "./supabase.types";
 import { validate } from "uuid";
 import { and, eq, ilike, notExists } from "drizzle-orm";
 import { collaborators, folders, users } from "./schema";
-import { revalidatePath } from "next/cache";
 
 export const createWorkspace = async (workspace: workspace) => {
   try {
@@ -53,7 +52,6 @@ export const updateWorkspace = async (
       .update(workspaces)
       .set(workspace)
       .where(eq(workspaces.id, workspaceId));
-    revalidatePath(`/dashboard/${workspaceId}`);
     return { data: null, error: null };
   } catch (error) {
     console.log(error);
@@ -316,4 +314,22 @@ export const createFile = async (file: File) => {
     console.log(error);
     return { data: null, error: "Error" };
   }
+};
+
+export const getCollaborators = async (workspaceId: string) => {
+  const response = await db
+    .select()
+    .from(collaborators)
+    .where(eq(collaborators.workspaceId, workspaceId));
+  if (!response.length) return [];
+  const userInformation: Promise<User | undefined>[] = response.map(
+    async (user) => {
+      const exists = await db.query.users.findFirst({
+        where: (u, { eq }) => eq(u.id, user.userId),
+      });
+      return exists;
+    }
+  );
+  const resolvedUsers = await Promise.all(userInformation);
+  return resolvedUsers.filter(Boolean) as User[];
 };
