@@ -68,7 +68,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
   const { socket } = useSocket();
   const router = useRouter();
   const pathname = usePathname();
-  const user = useSupabaseUser();
+  const { user } = useSupabaseUser();
 
   const [quill, setQuill] = useState<any>(null);
   const [collaborators, setCollaborators] = useState<
@@ -84,10 +84,15 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
       const editor = document.createElement("div");
       wrapper.append(editor);
       const Quill = (await import("quill")).default;
+      const QuillCorsors = (await import("quill-cursors")).default;
+      Quill.register("modules/cursors", QuillCorsors);
       const q = new Quill(editor, {
         theme: "snow",
         modules: {
           toolbar: TOOLBAR_OPTIONS,
+          cursors: {
+            transformOnTextChange: true,
+          },
         },
       });
       setQuill(q);
@@ -424,7 +429,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
 
     return () => {
       quill.off("text-change", quillHandler);
-      if(saveTimerRef.current) clearTimeout(saveTimerRef.current);
+      if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
     };
   }, [socket, quill, fileId, user, details, workspaceId, folderId]);
 
@@ -433,16 +438,43 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
     if (quill === null || socket === null) return;
     const socketHandler = (deltas: any, id: string) => {
       console.log(`Recieved changes from ${id}`);
-      
+
       if (id === fileId) {
         quill.updateContents(deltas);
       }
     };
-    socket.on('receive-changes', socketHandler);
+    socket.on("receive-changes", socketHandler);
     return () => {
-      socket.off('receive-changes', socketHandler);
+      socket.off("receive-changes", socketHandler);
     };
   }, [quill, socket, fileId]);
+
+  // Recieve collaborators from all clients
+  useEffect(() => {
+    if (!fileId || quill === null) return;
+    const room = supabase.channel(fileId);
+    const subscription = room.on("presence", { event: "sync" }, () => {
+      const newState = room.presenceState();
+      const newCollaborators = Object.keys(newState).flat() as any;
+      setCollaborators(newCollaborators);
+
+      if (user) {
+        const allCursors: any = [];
+        newCollaborators.forEach(
+          (collaborator: { id: string; email: string; avatar: string }) => {
+            if (collaborator.id !== user.id) return;
+            const userCourser = quill.getModule("cursors");
+            userCourser.createCursor(
+              collaborator.id,
+              collaborator.email.split("@")[0],
+              `#${Math.random().toString(16).slice(2, 8)}`
+            );
+            allCursors.push(userCourser);
+          }
+        );
+      }
+    });
+  }, [fileId, quill, supabase]);
 
   return (
     <>
