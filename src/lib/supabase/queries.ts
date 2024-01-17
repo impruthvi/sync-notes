@@ -110,6 +110,17 @@ export const getFolders = async (workspaceId: string) => {
   }
 };
 
+
+export const deleteFile = async (fileId: string) => {
+  if (!fileId) return;
+  await db.delete(files).where(eq(files.id, fileId));
+};
+
+export const deleteFolder = async (folderId: string) => {
+  if (!folderId) return;
+  await db.delete(files).where(eq(files.id, folderId));
+};
+
 export const getPrivateWorkspaces = async (userId: string) => {
   if (!userId) return [];
   const privateWorkspaces = (await db
