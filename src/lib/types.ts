@@ -31,3 +31,7 @@ export const SignUpFormSchema = z
     message: "Passwords don't match.",
     path: ["confirmPassword"],
   });
+
+  export const UploadBannerFormSchema = z.object({
+    banner: z.string().describe('Banner Image'),
+  });
