@@ -61,6 +61,45 @@ export const updateWorkspace = async (
   }
 };
 
+export const getFolderDetails = async (folderId: string) => {
+  const isValid = validate(folderId);
+  if (!isValid) {
+    data: [];
+    error: 'Error';
+  }
+
+  try {
+    const response = (await db
+      .select()
+      .from(folders)
+      .where(eq(folders.id, folderId))
+      .limit(1)) as Folder[];
+
+    return { data: response, error: null };
+  } catch (error) {
+    return { data: [], error: 'Error' };
+  }
+};
+
+export const getFileDetails = async (fileId: string) => {
+  const isValid = validate(fileId);
+  if (!isValid) {
+    data: [];
+    error: 'Error';
+  }
+  try {
+    const response = (await db
+      .select()
+      .from(files)
+      .where(eq(files.id, fileId))
+      .limit(1)) as File[];
+    return { data: response, error: null };
+  } catch (error) {
+    console.log('🔴Error', error);
+    return { data: [], error: 'Error' };
+  }
+};
+
 export const getUserSubscriptionStatus = async (userId: string) => {
   try {
     const data = await db.query.subscriptions.findFirst({
