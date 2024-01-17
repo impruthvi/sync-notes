@@ -27,7 +27,7 @@ const WorkspaceeDropdown: React.FC<WorkspaceeDropdownProps> = ({
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
 
   useEffect(() => {
-    if (!state.workspaces) {
+    if (!state.workspaces.length) {
       dispatch({
         type: "SET_WORKSPACES",
         payload: {
@@ -44,6 +44,13 @@ const WorkspaceeDropdown: React.FC<WorkspaceeDropdownProps> = ({
     }
   }, [privateWorkspaces, sharedWorkspaces, collaboratingWorkspaces]);
 
+  useEffect(() => {
+    const findSelectedWorkspace = state.workspaces.find(
+      (workspace) => workspace.id === defaultWorkspace?.id
+    );
+    if (findSelectedWorkspace) setSelectedWorkspace(findSelectedWorkspace);
+  }, [state, defaultWorkspace]);
+
   const habndleWorkspaceChange = (workspace: workspace) => {
     setSelectedWorkspace(workspace);
     setIsDropdownOpen(false);
@@ -56,7 +63,7 @@ const WorkspaceeDropdown: React.FC<WorkspaceeDropdownProps> = ({
           {selectedWorkspace ? (
             <SelectedWorkspace
               workspace={selectedWorkspace}
-              onClick={() => {}}
+              onClick={habndleWorkspaceChange}
             />
           ) : (
             "Select a workspace"
@@ -90,7 +97,7 @@ const WorkspaceeDropdown: React.FC<WorkspaceeDropdownProps> = ({
                     <SelectedWorkspace
                       key={option.id}
                       workspace={option}
-                      onClick={setSelectedWorkspace}
+                      onClick={habndleWorkspaceChange}
                     />
                   ))}
                 </>
@@ -103,7 +110,7 @@ const WorkspaceeDropdown: React.FC<WorkspaceeDropdownProps> = ({
                     <SelectedWorkspace
                       key={option.id}
                       workspace={option}
-                      onClick={setSelectedWorkspace}
+                      onClick={habndleWorkspaceChange}
                     />
                   ))}
                 </>
@@ -116,7 +123,7 @@ const WorkspaceeDropdown: React.FC<WorkspaceeDropdownProps> = ({
                     <SelectedWorkspace
                       key={option.id}
                       workspace={option}
-                      onClick={setSelectedWorkspace}
+                      onClick={habndleWorkspaceChange}
                     />
                   ))}
                 </>
