@@ -5,10 +5,34 @@ import { File, Folder, Subscription, User, workspace } from "./supabase.types";
 import { validate } from "uuid";
 import { and, eq, ilike, notExists } from "drizzle-orm";
 import { collaborators, folders, users } from "./schema";
+import { revalidatePath } from "next/cache";
 
 export const createWorkspace = async (workspace: workspace) => {
   try {
     const response = await db.insert(workspaces).values(workspace);
+    return { data: null, error: null };
+  } catch (error) {
+    console.log(error);
+    return { data: null, error: "Error" };
+  }
+};
+
+export const deleteWorkspace = async (workspaceId: string) => {
+  if (!workspaceId) return;
+  await db.delete(workspaces).where(eq(workspaces.id, workspaceId));
+};
+
+export const updateWorkspace = async (
+  workspace: Partial<workspace>,
+  workspaceId: string
+) => {
+  if (!workspaceId) return;
+  try {
+    await db
+      .update(workspaces)
+      .set(workspace)
+      .where(eq(workspaces.id, workspaceId));
+    revalidatePath(`/dashboard/${workspaceId}`);
     return { data: null, error: null };
   } catch (error) {
     console.log(error);
@@ -147,6 +171,27 @@ export const addCollaborators = async (users: User[], workspaceId: string) => {
   });
 };
 
+export const removeCollaborators = async (
+  users: User[],
+  workspaceId: string
+) => {
+  const response = users.forEach(async (user: User) => {
+    const userExists = await db.query.collaborators.findFirst({
+      where: (u, { eq }) =>
+        and(eq(u.userId, user.id), eq(u.workspaceId, workspaceId)),
+    });
+    if (userExists)
+      await db
+        .delete(collaborators)
+        .where(
+          and(
+            eq(collaborators.workspaceId, workspaceId),
+            eq(collaborators.userId, user.id)
+          )
+        );
+  });
+};
+
 export const getUsersFromSearch = async (email: string) => {
   if (!email) return [];
   const accounts = db
@@ -198,6 +243,6 @@ export const createFile = async (file: File) => {
     return { data: null, error: null };
   } catch (error) {
     console.log(error);
-    return { data: null, error: 'Error' };
+    return { data: null, error: "Error" };
   }
 };
