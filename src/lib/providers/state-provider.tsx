@@ -23,11 +23,16 @@ interface AppState {
 
 type Action =
   | { type: "ADD_WORKSPACE"; payload: appWorkspacesType }
+  | { type: "DELETE_WORKSPACE"; payload: string }
   | {
       type: "SET_WORKSPACES";
       payload: {
         workspaces: appWorkspacesType[] | [];
       };
+    }
+  | {
+      type: "UPDATE_WORKSPACE";
+      payload: { workspace: Partial<appWorkspacesType>; workspaceId: string };
     }
   | {
       type: "SET_FOLDERS";
@@ -76,10 +81,31 @@ const appReducer = (
         workspaces: [...state.workspaces, action.payload],
       };
 
+    case "DELETE_WORKSPACE":
+      return {
+        ...state,
+        workspaces: state.workspaces.filter(
+          (workspace) => workspace.id !== action.payload
+        ),
+      };
+
     case "SET_WORKSPACES":
       return {
         ...state,
         workspaces: action.payload.workspaces,
+      };
+    case "UPDATE_WORKSPACE":
+      return {
+        ...state,
+        workspaces: state.workspaces.map((workspace) => {
+          if (workspace.id === action.payload.workspaceId) {
+            return {
+              ...workspace,
+              ...action.payload.workspace,
+            };
+          }
+          return workspace;
+        }),
       };
 
     case "SET_FOLDERS":
@@ -236,7 +262,7 @@ const AppStateProvider: React.FC<AppStateProviderProps> = ({ children }) => {
   const pathname = usePathname();
 
   const workspaceId = useMemo(() => {
-    const urlSegments = pathname?.split('/').filter(Boolean);
+    const urlSegments = pathname?.split("/").filter(Boolean);
     if (urlSegments)
       if (urlSegments.length > 1) {
         return urlSegments[1];
@@ -244,7 +270,7 @@ const AppStateProvider: React.FC<AppStateProviderProps> = ({ children }) => {
   }, [pathname]);
 
   const folderId = useMemo(() => {
-    const urlSegments = pathname?.split('/').filter(Boolean);
+    const urlSegments = pathname?.split("/").filter(Boolean);
     if (urlSegments)
       if (urlSegments?.length > 2) {
         return urlSegments[2];
@@ -252,7 +278,7 @@ const AppStateProvider: React.FC<AppStateProviderProps> = ({ children }) => {
   }, [pathname]);
 
   const fileId = useMemo(() => {
-    const urlSegments = pathname?.split('/').filter(Boolean);
+    const urlSegments = pathname?.split("/").filter(Boolean);
     if (urlSegments)
       if (urlSegments?.length > 3) {
         return urlSegments[3];
@@ -268,7 +294,7 @@ const AppStateProvider: React.FC<AppStateProviderProps> = ({ children }) => {
       }
       if (!data) return;
       dispatch({
-        type: 'SET_FILES',
+        type: "SET_FILES",
         payload: { workspaceId, files: data, folderId },
       });
     };
@@ -276,7 +302,7 @@ const AppStateProvider: React.FC<AppStateProviderProps> = ({ children }) => {
   }, [folderId, workspaceId]);
 
   useEffect(() => {
-    console.log('App State Changed', state);
+    console.log("App State Changed", state);
   }, [state]);
 
   return (
