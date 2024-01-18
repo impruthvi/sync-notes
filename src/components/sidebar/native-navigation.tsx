@@ -5,6 +5,7 @@ import SyncnoteHomeIcon from "../icons/syncnoteHomeIcon";
 import SyncnoteSettingsIcon from "../icons/syncnoteSettingsIcon";
 import SyncnoteTrashIcon from "../icons/syncnoteTrashIcon";
 import Settings from "../settings/settings";
+import Trash from '../trash/trash';
 
 interface NativeNavigationProps {
   myWorkspaceId: string;
@@ -47,20 +48,19 @@ const NativeNavigation: React.FC<NativeNavigationProps> = ({
           </li>
         </Settings>
 
-        <li>
-          <Link
+        <Trash>
+          <li
             className="group/native
             flex
             text-Neutrals/neutrals-7
             transition-all
             gap-2
           "
-            href={`/dashboard/${myWorkspaceId}`}
           >
-            <SyncnoteTrashIcon />
+             <SyncnoteTrashIcon />
             <span>Trash</span>
-          </Link>
-        </li>
+          </li>
+        </Trash>
       </ul>
     </nav>
   );
