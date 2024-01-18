@@ -349,6 +349,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
 
         if (!quill) return;
 
+        if (!selectedDir[0].data) return;
         quill.setContents(JSON.parse(selectedDir[0].data || ""));
 
         dispatch({
