@@ -372,11 +372,13 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
   // Send quill changes to all clients
   useEffect(() => {
     if (socket === null || quill === null || !fileId || !user) return;
-    const selectionChangeHandler = (
-      range: any,
-      oldRange: any,
-      source: any
-    ) => {};
+    const selectionChangeHandler = (cursorId: string) => {
+      return (range: any, oldRange: any, source: any) => {
+        if (source === "user" && cursorId) {
+          socket.emit("send-cursor-move", range, fileId, cursorId);
+        }
+      };
+    };
     const quillHandler = (delta: any, oldDelta: any, source: any) => {
       if (source !== "user") return;
       if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
@@ -428,9 +430,12 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
       socket.emit("send-changes", delta, fileId);
     };
     quill.on("text-change", quillHandler);
+    quill.on("selection-change", selectionChangeHandler(user.id));
 
     return () => {
       quill.off("text-change", quillHandler);
+      quill.off("selection-change", selectionChangeHandler(user.id));
+
       if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
     };
   }, [socket, quill, fileId, user, details, workspaceId, folderId]);
@@ -455,7 +460,8 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
   useEffect(() => {
     if (!fileId || quill === null) return;
     const room = supabase.channel(fileId);
-    const subscription = room.on("presence", { event: "sync" }, () => {
+    const subscription = room
+      .on("presence", { event: "sync" }, () => {
         const newState = room.presenceState();
         const newCollaborators = Object.values(newState).flat() as any;
         setCollaborators(newCollaborators);
@@ -495,6 +501,25 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
       supabase.removeChannel(room);
     };
   }, [fileId, quill, supabase, user]);
+
+  useEffect(() => {
+    if (quill === null || socket === null || !fileId || !localCursors.length)
+      return;
+    const socketHandler = (range: any, roomId: string, cursorId: string) => {
+      if (roomId === fileId) {
+        const cursorToMove = localCursors.find(
+          (c: any) => c.cursors()?.[0].id === cursorId
+        );
+        if (cursorToMove) {
+          cursorToMove.moveCursor(cursorId, range);
+        }
+      }
+    };
+    socket.on("receive-cursor-move", socketHandler);
+    return () => {
+      socket.off("receive-cursor-move", socketHandler);
+    };
+  }, [quill, socket, fileId, localCursors]);
 
   return (
     <>
