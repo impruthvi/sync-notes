@@ -11,6 +11,7 @@ import { useToast } from "../ui/use-toast";
 import { Accordion } from "../ui/accordion";
 import Dropdown from "./Dropdown";
 import useSupabaseRealtime from "@/lib/hooks/useSupabaseRealtime";
+import { useSubscriptionModal } from "@/lib/providers/subscription-modal-provider";
 
 interface FoldersDropdownListProps {
   workspaceFolders: Folder[];
@@ -23,7 +24,7 @@ const FoldersDropdownList: React.FC<FoldersDropdownListProps> = ({
 }) => {
   useSupabaseRealtime();
   const { state, dispatch, folderId } = useAppState();
-  //   const { open, setOpen } = useSubscriptionModal();
+    const { open, setOpen } = useSubscriptionModal();
   const { toast } = useToast();
   const [folders, setFolders] = useState(workspaceFolders);
   const { subscription } = useSupabaseUser();
@@ -56,9 +57,10 @@ const FoldersDropdownList: React.FC<FoldersDropdownListProps> = ({
 
   //add folder
   const addFolderHandler = async () => {
-    // if (folders.length >= 3 && !subscription) {
-    //   return;
-    // }
+    if (folders.length >= 3 && !subscription) {
+      setOpen(true);
+      return;
+    }
     const newFolder: Folder = {
       data: null,
       id: v4(),

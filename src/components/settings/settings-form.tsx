@@ -56,12 +56,14 @@ import { Alert, AlertDescription } from "../ui/alert";
 import SyncnoteProfileIcon from "../icons/syncnoteProfileIcon";
 import LogoutButton from "../global/logout-button";
 import Link from "next/link";
+import { useSubscriptionModal } from "@/lib/providers/subscription-modal-provider";
 
 const SettingsForm = () => {
   const { toast } = useToast();
   const { user, subscription } = useSupabaseUser();
   const router = useRouter();
   const supabase = createClientComponentClient();
+  const { open, setOpen } = useSubscriptionModal();
 
   const { state, workspaceId, dispatch } = useAppState();
   const [permissions, setPermissions] = useState("private");
@@ -437,7 +439,7 @@ const SettingsForm = () => {
               size="sm"
               variant={"secondary"}
               className="text-sm"
-              onClick={() => {}}
+              onClick={() => setOpen(true)}
             >
               Start Plan
             </Button>
