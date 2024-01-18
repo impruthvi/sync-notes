@@ -22,7 +22,7 @@ const migrateDb = async () => {
     console.log("Error migrating database");
   }
 };
-
-migrateDb();
+// you can uncomment this to run migrations
+// migrateDb();
 
 export default db;
