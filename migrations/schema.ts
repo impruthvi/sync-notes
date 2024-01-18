@@ -1,5 +1,5 @@
 import { pgTable, foreignKey, pgEnum, uuid, timestamp, text, jsonb, integer, boolean, bigint } from "drizzle-orm/pg-core"
-  import { sql } from "drizzle-orm"
+  import { relations, sql } from "drizzle-orm"
 
 export const keyStatus = pgEnum("key_status", ['default', 'valid', 'invalid', 'expired'])
 export const keyType = pgEnum("key_type", ['aead-ietf', 'aead-det', 'hmacsha512', 'hmacsha256', 'auth', 'shorthash', 'generichash', 'kdf', 'secretbox', 'secretstream', 'stream_xchacha20'])
@@ -112,3 +112,14 @@ export const prices = pgTable("prices", {
 	trialPeriodDays: integer("trial_period_days"),
 	metadata: jsonb("metadata"),
 });
+
+export const productsRelations = relations(products, ({ many }) => ({
+	prices: many(prices),
+  }));
+  
+  export const pricesRelations = relations(prices, ({ one }) => ({
+	product: one(products, {
+	  fields: [prices.productId],
+	  references: [products.id],
+	}),
+  }));
