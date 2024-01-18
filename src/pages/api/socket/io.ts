@@ -29,7 +29,7 @@ const ioHandler = (req: NextApiRequest, res: NextApiResponseServerIo) => {
         socket.to(fileId).emit("receive-changes", deltas, fileId);
       });
 
-      socket.on("send-curson-move", (range, fileId, cursorId) => {
+      socket.on("send-cursor-move", (range, fileId, cursorId) => {
         socket.to(fileId).emit("receive-cursor-move", range, fileId, cursorId);
       });
     });
