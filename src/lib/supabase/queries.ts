@@ -21,7 +21,7 @@ export const getWorkspaceDetails = async (workspaceId: string) => {
   if (!isValid)
     return {
       data: [],
-      error: 'Error',
+      error: "Error",
     };
 
   try {
@@ -33,7 +33,7 @@ export const getWorkspaceDetails = async (workspaceId: string) => {
     return { data: response, error: null };
   } catch (error) {
     console.log(error);
-    return { data: [], error: 'Error' };
+    return { data: [], error: "Error" };
   }
 };
 
@@ -63,7 +63,7 @@ export const getFolderDetails = async (folderId: string) => {
   const isValid = validate(folderId);
   if (!isValid) {
     data: [];
-    error: 'Error';
+    error: "Error";
   }
 
   try {
@@ -75,7 +75,7 @@ export const getFolderDetails = async (folderId: string) => {
 
     return { data: response, error: null };
   } catch (error) {
-    return { data: [], error: 'Error' };
+    return { data: [], error: "Error" };
   }
 };
 
@@ -83,7 +83,7 @@ export const getFileDetails = async (fileId: string) => {
   const isValid = validate(fileId);
   if (!isValid) {
     data: [];
-    error: 'Error';
+    error: "Error";
   }
   try {
     const response = (await db
@@ -93,8 +93,8 @@ export const getFileDetails = async (fileId: string) => {
       .limit(1)) as File[];
     return { data: response, error: null };
   } catch (error) {
-    console.log('🔴Error', error);
-    return { data: [], error: 'Error' };
+    console.log("🔴Error", error);
+    return { data: [], error: "Error" };
   }
 };
 
@@ -146,7 +146,6 @@ export const getFolders = async (workspaceId: string) => {
     return { data: null, error: "Error" };
   }
 };
-
 
 export const deleteFile = async (fileId: string) => {
   if (!fileId) return;
@@ -348,7 +347,7 @@ export const getActiveProductsWithPrice = async () => {
       where: (pro, { eq }) => eq(pro.active, true),
       with: {
         prices: {
-          where: (pri: { active: any; }, { eq }: any) => eq(pri.active, true),
+          where: (pri, { eq }) => eq(pri.active, true),
         },
       },
     });
