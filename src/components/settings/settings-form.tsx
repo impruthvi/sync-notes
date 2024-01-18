@@ -57,6 +57,7 @@ import SyncnoteProfileIcon from "../icons/syncnoteProfileIcon";
 import LogoutButton from "../global/logout-button";
 import Link from "next/link";
 import { useSubscriptionModal } from "@/lib/providers/subscription-modal-provider";
+import { postData } from "@/lib/utils";
 
 const SettingsForm = () => {
   const { toast } = useToast();
@@ -76,6 +77,21 @@ const SettingsForm = () => {
   const [loadingPortal, setLoadingPortal] = useState(false);
 
   //  WIP Payment stuff
+
+  const redirectToCustomerPortal = async () => {
+    setLoadingPortal(true);
+    try {
+      const { url, error } = await postData({
+        url: '/api/create-portal-link',
+      });
+      window.location.assign(url);
+    } catch (error) {
+      console.log(error);
+      setLoadingPortal(false);
+    }
+    setLoadingPortal(false);
+  };
+
   useEffect(() => {
     const showingWorkspace = state.workspaces.find(
       (workspace) => workspace.id === workspaceId
@@ -427,7 +443,7 @@ const SettingsForm = () => {
               variant={"secondary"}
               disabled={loadingPortal}
               className="text-sm"
-              onClick={() => {}}
+              onClick={redirectToCustomerPortal}
             >
               Manage Subscription
             </Button>
