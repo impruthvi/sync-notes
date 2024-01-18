@@ -8,6 +8,7 @@ import { Button } from "../ui/button";
 import {
   deleteFile,
   deleteFolder,
+  findUser,
   getFileDetails,
   getFolderDetails,
   getWorkspaceDetails,
@@ -76,6 +77,7 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
   >([]);
   const [saving, setSaving] = useState(false);
   const [deletingBanner, setDeletingBanner] = useState(false);
+  const [localCursors, setLocalCursors] = useState<any>([]);
 
   const wrapperRef = useCallback(async (wrapper: any) => {
     if (typeof window !== "undefined") {
@@ -454,27 +456,45 @@ const QuillEditor: React.FC<QuillEditorProps> = ({
     if (!fileId || quill === null) return;
     const room = supabase.channel(fileId);
     const subscription = room.on("presence", { event: "sync" }, () => {
-      const newState = room.presenceState();
-      const newCollaborators = Object.keys(newState).flat() as any;
-      setCollaborators(newCollaborators);
+        const newState = room.presenceState();
+        const newCollaborators = Object.values(newState).flat() as any;
+        setCollaborators(newCollaborators);
+        if (user) {
+          const allCursors: any = [];
+          newCollaborators.forEach(
+            (collaborator: { id: string; email: string; avatar: string }) => {
+              if (collaborator.id !== user.id) {
+                const userCursor = quill.getModule("cursors");
+                userCursor.createCursor(
+                  collaborator.id,
+                  collaborator.email.split("@")[0],
+                  `#${Math.random().toString(16).slice(2, 8)}`
+                );
+                allCursors.push(userCursor);
+              }
+            }
+          );
+          setLocalCursors(allCursors);
+        }
+      })
+      .subscribe(async (status) => {
+        if (status !== "SUBSCRIBED" || !user) return;
+        const response = await findUser(user.id);
+        if (!response) return;
 
-      if (user) {
-        const allCursors: any = [];
-        newCollaborators.forEach(
-          (collaborator: { id: string; email: string; avatar: string }) => {
-            if (collaborator.id !== user.id) return;
-            const userCourser = quill.getModule("cursors");
-            userCourser.createCursor(
-              collaborator.id,
-              collaborator.email.split("@")[0],
-              `#${Math.random().toString(16).slice(2, 8)}`
-            );
-            allCursors.push(userCourser);
-          }
-        );
-      }
-    });
-  }, [fileId, quill, supabase]);
+        room.track({
+          id: user.id,
+          email: user.email?.split("@")[0],
+          avatarUrl: response.avatarUrl
+            ? supabase.storage.from("avatars").getPublicUrl(response.avatarUrl)
+                .data.publicUrl
+            : "",
+        });
+      });
+    return () => {
+      supabase.removeChannel(room);
+    };
+  }, [fileId, quill, supabase, user]);
 
   return (
     <>
