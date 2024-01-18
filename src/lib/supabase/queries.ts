@@ -333,3 +333,10 @@ export const getCollaborators = async (workspaceId: string) => {
   const resolvedUsers = await Promise.all(userInformation);
   return resolvedUsers.filter(Boolean) as User[];
 };
+
+export const findUser = async (userId: string) => {
+  const response = await db.query.users.findFirst({
+    where: (u, { eq }) => eq(u.id, userId),
+  });
+  return response;
+};
