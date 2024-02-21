@@ -19,7 +19,6 @@ const useSupabaseRealtime = () => {
         { event: "*", schema: "public", table: "files" },
         async (payload) => {
           if (payload.eventType === "INSERT") {
-            console.log("🟢 RECEIVED REAL TIME EVENT");
             const {
               folder_id: folderId,
               workspace_id: workspaceId,

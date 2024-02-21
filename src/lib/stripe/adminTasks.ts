@@ -33,7 +33,6 @@ export const upsertProductRecord = async (product: Stripe.Product) => {
 };
 
 export const upsertPriceRecord = async (price: Stripe.Price) => {
-  console.log(price, "PRICE");
   const priceData: Price = {
     id: price.id,
     productId: typeof price.product === "string" ? price.product : null,
@@ -128,7 +127,6 @@ export const manageSubscriptionStatusChange = async (
     const subscription = await stripe.subscriptions.retrieve(subscriptionId, {
       expand: ["default_payment_method"],
     });
-    console.log("🟢UPDATED to  ", subscription.status);
 
     const subscriptionData: Subscription = {
       id: subscription.id,
