@@ -29,7 +29,6 @@ export const upsertProductRecord = async (product: Stripe.Product) => {
   } catch (error) {
     throw new Error();
   }
-  console.log("Product inserted/updates:", product.id);
 };
 
 export const upsertPriceRecord = async (price: Stripe.Price) => {
@@ -54,7 +53,6 @@ export const upsertPriceRecord = async (price: Stripe.Price) => {
   } catch (error) {
     throw new Error(`Could not insert/update the price ${error}`);
   }
-  console.log(`Price inserted/updated: ${price.id}`);
 };
 
 export const createOrRetrieveCustomer = async ({
@@ -83,7 +81,6 @@ export const createOrRetrieveCustomer = async ({
       await db
         .insert(customers)
         .values({ id: uuid, stripeCustomerId: customer.id });
-      console.log(`New customer created and inserted for ${uuid}.`);
       return customer.id;
     } catch (stripeError) {
       throw new Error("Could not create Customer or find the customer");
@@ -165,8 +162,7 @@ export const manageSubscriptionStatusChange = async (
       .values(subscriptionData)
       .onConflictDoUpdate({ target: subscriptions.id, set: subscriptionData });
     console.log(
-      `Inserted/updated subscription [${subscription.id}] for user [${uuid}]`
-    );
+
     if (createAction && subscription.default_payment_method && uuid) {
       await copyBillingDetailsToCustomer(
         uuid,
