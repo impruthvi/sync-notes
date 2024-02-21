@@ -53,7 +53,6 @@ export async function POST(request: NextRequest) {
             subscription.customer as string,
             event.type === "customer.subscription.created"
           );
-          console.log("FROM WEBHOOK🚀", subscription.status);
           break;
         case "checkout.session.completed":
           const checkoutSession = event.data.object as Stripe.Checkout.Session;
